@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: mysql:8.3
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./database:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+
+  web:
+    build: .
+    stop_signal: SIGINT
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mysql
+    env_file:
+      - .env
